@@ -1080,16 +1080,153 @@ const CARS = [
   { n: 'Ram 1500 TRX', zh: '公羊 1500 TRX', y: 2021, c: '美国', cy: 8, d: 4, b: '皮卡', dr: '四驱', asp: '机械增压', hp: 702 },
   { n: 'Dodge Ram SRT-10 (2004)', zh: '道奇 公羊 SRT-10 2004', y: 2004, c: '美国', cy: 10, d: 2, b: '皮卡', dr: '后驱', asp: '自然吸气', hp: 500 },
   { n: 'Jeep Gladiator Mojave', zh: '吉普 角斗士 Mojave', y: 2020, c: '美国', cy: 8, d: 4, b: '皮卡', dr: '四驱', asp: '自然吸气', hp: 285 },
+  { n: 'Audi Quattro', zh: '奥迪 Quattro', a: 'Ur-Quattro', y: 1980, c: '德国', cy: 5, d: 2, b: '轿跑', dr: '四驱', asp: '涡轮增压', hp: 200 },
+  { n: 'Audi RS Q3 Sportback', zh: '奥迪 RS Q3 Sportback', a: 'F3', y: 2020, c: '德国', cy: 5, d: 4, b: 'SUV', dr: '四驱', asp: '涡轮增压', hp: 400 },
+  { n: 'Audi A1 quattro', zh: '奥迪 A1 quattro', a: '8X', y: 2012, c: '德国', cy: 4, d: 2, b: '掀背', dr: '四驱', asp: '涡轮增压', hp: 256 },
+  { n: 'Audi S4 Avant B5', zh: '奥迪 S4 Avant B5', a: 'B5', y: 1997, c: '德国', cy: 6, d: 4, b: '旅行车', dr: '四驱', asp: '双涡轮', hp: 265 },
+  { n: 'BMW M3 E90', zh: '宝马 M3 E90', a: 'E90', y: 2008, c: '德国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 420 },
+  { n: 'BMW M4 GTS', zh: '宝马 M4 GTS', a: 'F82', y: 2016, c: '德国', cy: 6, d: 2, b: '轿跑', dr: '后驱', asp: '双涡轮', hp: 493 },
+  { n: 'BMW M5 Touring E61', zh: '宝马 M5 Touring E61', a: 'E61', y: 2005, c: '德国', cy: 10, d: 4, b: '旅行车', dr: '后驱', asp: '自然吸气', hp: 507 },
+  { n: 'BMW M6 F13', zh: '宝马 M6 F13', a: 'F13', y: 2013, c: '德国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '双涡轮', hp: 560 },
+  { n: 'BMW M3 GTS E92', zh: '宝马 M3 GTS E92', a: 'E92', y: 2010, c: '德国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 450 },
+  { n: 'BMW Z1', zh: '宝马 Z1', y: 1989, c: '德国', cy: 6, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 170 },
+  { n: 'Alpina B3 Touring G21', zh: '阿尔宾娜 B3 Touring G21', a: 'G21', y: 2020, c: '德国', cy: 6, d: 4, b: '旅行车', dr: '四驱', asp: '双涡轮', hp: 462 },
+  { n: 'Mercedes 300 CE AMG Hammer', zh: '奔驰 300 CE AMG Hammer', a: 'C124', y: 1987, c: '德国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 375 },
+  { n: 'Mercedes SL 73 AMG', zh: '奔驰 SL 73 AMG', a: 'R129', y: 1999, c: '德国', cy: 12, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 525 },
+  { n: 'Mercedes C 32 AMG', zh: '奔驰 C 32 AMG', a: 'W203', y: 2001, c: '德国', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '机械增压', hp: 354 },
+  { n: 'Mercedes E 55 AMG W210', zh: '奔驰 E 55 AMG W210', a: 'W210', y: 1997, c: '德国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 354 },
+  { n: 'Mercedes SLK 32 AMG', zh: '奔驰 SLK 32 AMG', a: 'R170', y: 2001, c: '德国', cy: 6, d: 2, b: '敞篷', dr: '后驱', asp: '机械增压', hp: 354 },
+  { n: 'Mercedes C 36 AMG', zh: '奔驰 C 36 AMG', a: 'W202', y: 1994, c: '德国', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 280 },
+  { n: 'Porsche 914/6', zh: '保时捷 914/6', a: '914', y: 1970, c: '德国', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 110 },
+  { n: 'Porsche 924 Carrera GT', zh: '保时捷 924 Carrera GT', y: 1980, c: '德国', cy: 4, d: 2, b: '轿跑', dr: '后驱', asp: '涡轮增压', hp: 210 },
+  { n: 'Porsche 356 Speedster', zh: '保时捷 356 Speedster', a: '356A', y: 1957, c: '德国', cy: 4, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 75 },
+  { n: 'VW Passat W8', zh: '大众 Passat W8', a: 'B5.5', y: 2001, c: '德国', cy: 8, d: 4, b: '轿车', dr: '四驱', asp: '自然吸气', hp: 275 },
+  { n: 'VW Phaeton W12', zh: '大众 Phaeton W12', a: '3D', y: 2002, c: '德国', cy: 12, d: 4, b: '轿车', dr: '四驱', asp: '自然吸气', hp: 420 },
+  { n: 'VW Lupo GTI', zh: '大众 Lupo GTI', a: '6X', y: 2000, c: '德国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 125 },
+  { n: 'VW New Beetle RSi', zh: '大众 新甲壳虫 RSi', a: '9C', y: 2001, c: '德国', cy: 6, d: 2, b: '轿跑', dr: '四驱', asp: '自然吸气', hp: 224 },
+  { n: 'Opel Calibra Turbo 4x4', zh: '欧宝 Calibra Turbo 4x4', a: 'Calibra', y: 1992, c: '德国', cy: 4, d: 2, b: '轿跑', dr: '四驱', asp: '涡轮增压', hp: 204 },
+  { n: 'Opel Lotus Omega', zh: '欧宝 Lotus Omega', a: 'Lotus Carlton', y: 1990, c: '德国', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '双涡轮', hp: 377 },
+  { n: 'Opel GT', zh: '欧宝 GT', a: 'GT', y: 2007, c: '德国', cy: 4, d: 2, b: '跑车', dr: '后驱', asp: '涡轮增压', hp: 264 },
+  { n: 'NSU Ro 80', zh: 'NSU Ro 80', a: 'Ro 80', y: 1967, c: '德国', cy: 2, d: 4, b: '轿车', dr: '前驱', asp: '自然吸气', hp: 115 },
+  { n: 'Apollo IE', zh: 'Apollo IE', a: 'Intensa Emozione', y: 2018, c: '德国', cy: 12, d: 2, b: '超级跑车', dr: '后驱', asp: '自然吸气', hp: 780 },
+  { n: 'Brabus 800', zh: '巴博斯 800', a: 'Widestar', y: 2020, c: '德国', cy: 8, d: 4, b: 'SUV', dr: '四驱', asp: '双涡轮', hp: 800 },
+  { n: 'Ferrari 275 GTB/4', zh: '法拉利 275 GTB/4', y: 1966, c: '意大利', cy: 12, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 300 },
+  { n: 'Ferrari 512 BB', zh: '法拉利 512 BB', a: 'Berlinetta Boxer', y: 1976, c: '意大利', cy: 12, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 360 },
+  { n: 'Ferrari Dino 246 GT', zh: '法拉利 Dino 246 GT', y: 1969, c: '意大利', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 195 },
+  { n: 'Ferrari F12tdf', zh: '法拉利 F12tdf', y: 2015, c: '意大利', cy: 12, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 780 },
+  { n: 'Lamborghini Jalpa P350', zh: '兰博基尼 Jalpa P350', a: 'Jalpa', y: 1981, c: '意大利', cy: 8, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 255 },
+  { n: 'Lamborghini Espada 400 GT', zh: '兰博基尼 Espada 400 GT', a: 'Espada', y: 1968, c: '意大利', cy: 12, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 325 },
+  { n: 'Maserati Khamsin', zh: '玛莎拉蒂 Khamsin', y: 1974, c: '意大利', cy: 8, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 320 },
+  { n: 'Maserati Shamal', zh: '玛莎拉蒂 Shamal', y: 1990, c: '意大利', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '双涡轮', hp: 326 },
+  { n: 'Maserati 3200 GT', zh: '玛莎拉蒂 3200 GT', y: 1998, c: '意大利', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '双涡轮', hp: 370 },
+  { n: 'Alfa Romeo Montreal', zh: '阿尔法罗密欧 Montreal', y: 1970, c: '意大利', cy: 8, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 200 },
+  { n: 'Alfa Romeo SZ', zh: '阿尔法罗密欧 SZ', a: 'ES-30', y: 1989, c: '意大利', cy: 6, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 210 },
+  { n: 'Lancia Aurelia B20 GT', zh: '蓝旗亚 Aurelia B20 GT', a: 'B20', y: 1951, c: '意大利', cy: 6, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 75 },
+  { n: 'Peugeot 205 Rallye', zh: '标致 205 Rallye', y: 1988, c: '法国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 103 },
+  { n: 'Peugeot 309 GTI 16', zh: '标致 309 GTI 16', y: 1990, c: '法国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 160 },
+  { n: 'Peugeot 306 Maxi', zh: '标致 306 Maxi', y: 1997, c: '法国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 280 },
+  { n: 'Citroen BX GTi 16V', zh: '雪铁龙 BX GTi 16V', y: 1987, c: '法国', cy: 4, d: 4, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 160 },
+  { n: 'Citroen AX Sport', zh: '雪铁龙 AX Sport', y: 1988, c: '法国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 95 },
+  { n: 'Renault 8 Gordini', zh: '雷诺 8 Gordini', y: 1964, c: '法国', cy: 4, d: 2, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 95 },
+  { n: 'Renault 21 Turbo', zh: '雷诺 21 涡轮', y: 1987, c: '法国', cy: 4, d: 4, b: '轿车', dr: '前驱', asp: '涡轮增压', hp: 175 },
+  { n: 'Alpine A610', zh: '阿尔派 A610', y: 1992, c: '法国', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '涡轮增压', hp: 250 },
+  { n: 'Volvo P1800 S', zh: '沃尔沃 P1800 S', a: 'P1800', y: 1961, c: '瑞典', cy: 4, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 100 },
+  { n: 'Volvo 480 Turbo', zh: '沃尔沃 480 涡轮', y: 1986, c: '瑞典', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '涡轮增压', hp: 120 },
+  { n: 'Volvo 740 Turbo', zh: '沃尔沃 740 涡轮', y: 1985, c: '瑞典', cy: 4, d: 4, b: '轿车', dr: '后驱', asp: '涡轮增压', hp: 160 },
+  { n: 'Saab Sonett III', zh: '萨博 Sonett III', y: 1970, c: '瑞典', cy: 4, d: 2, b: '跑车', dr: '前驱', asp: '自然吸气', hp: 65 },
+  { n: 'Saab 96 V4', zh: '萨博 96 V4', y: 1967, c: '瑞典', cy: 4, d: 2, b: '轿车', dr: '前驱', asp: '自然吸气', hp: 65 },
+  { n: 'Polestar 2 BST edition 270', zh: '极星 2 BST edition 270', y: 2022, c: '瑞典', cy: 0, d: 4, b: '掀背', dr: '四驱', asp: '电动', hp: 476 },
+  { n: 'Lynk & Co 05+', zh: '领克 05+', y: 2021, c: '中国', cy: 4, d: 4, b: 'SUV', dr: '四驱', asp: '涡轮增压', hp: 265 },
+  { n: 'NIO ES6', zh: '蔚来 ES6', y: 2023, c: '中国', cy: 0, d: 4, b: 'SUV', dr: '四驱', asp: '电动', hp: 490 },
+  { n: 'NIO ES7', zh: '蔚来 ES7', y: 2022, c: '中国', cy: 0, d: 4, b: 'SUV', dr: '四驱', asp: '电动', hp: 653 },
+  { n: 'Fang Cheng Bao 5', zh: '方程豹 豹5', a: 'Leopard 5', y: 2023, c: '中国', cy: 4, d: 4, b: 'SUV', dr: '四驱', asp: '涡轮增压', hp: 687 },
+  { n: 'Tank 500', zh: '坦克 500', y: 2022, c: '中国', cy: 6, d: 4, b: 'SUV', dr: '四驱', asp: '涡轮增压', hp: 354 },
+  { n: 'Hongqi CA770', zh: '红旗 CA770', y: 1965, c: '中国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 220 },
+  { n: 'Skoda Felicia', zh: '斯柯达 Felicia', y: 1959, c: '捷克', cy: 4, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 50 },
+  { n: 'Skoda 1100 OHC', zh: '斯柯达 1100 OHC', y: 1957, c: '捷克', cy: 4, d: 0, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 92 },
+  { n: 'Seat Ibiza Kit Car', zh: '西雅特 Ibiza Kit Car', y: 1996, c: '西班牙', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 260 },
+  { n: 'Toyota 86 ZN6', zh: '丰田 86 ZN6', a: 'ZN6', y: 2012, c: '日本', cy: 4, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 200 },
+  { n: 'Toyota Century V12', zh: '丰田 世纪 V12', a: 'GZG50', y: 1997, c: '日本', cy: 12, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 280 },
+  { n: 'Toyota Blade Master G', zh: '丰田 Blade Master G', a: 'GRE156', y: 2007, c: '日本', cy: 6, d: 4, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 280 },
+  { n: 'Toyota Mark X GRMN', zh: '丰田 锐志 GRMN', a: 'GRX133', y: 2019, c: '日本', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 318 },
+  { n: 'Nissan Silvia S12', zh: '日产 西尔维娅 S12', a: 'S12', y: 1984, c: '日本', cy: 4, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 150 },
+  { n: 'Nissan March Super Turbo', zh: '日产 玛驰 超级涡轮', a: 'EK10', y: 1989, c: '日本', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '机械+涡轮', hp: 110 },
+  { n: 'Nissan Fairlady 280ZX Turbo', zh: '日产 淑女 280ZX 涡轮', a: 'S130', y: 1981, c: '日本', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '涡轮增压', hp: 180 },
+  { n: 'Nissan Pulsar VZ-R N1', zh: '日产 脉冲星 VZ-R N1', a: 'N15', y: 1997, c: '日本', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 200 },
+  { n: 'Nissan Skyline 400R', zh: '日产 天际线 400R', a: 'V37', y: 2017, c: '日本', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '双涡轮', hp: 405 },
+  { n: 'Nissan Sentra SE-R', zh: '日产 森特拉 SE-R', a: 'B13', y: 1991, c: '日本', cy: 4, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 140 },
+  { n: 'Honda CR-X del Sol SiR', zh: '本田 CR-X del Sol SiR', a: 'EG2', y: 1992, c: '日本', cy: 4, d: 2, b: '敞篷', dr: '前驱', asp: '自然吸气', hp: 170 },
+  { n: 'Honda Civic Si EM1', zh: '本田 思域 Si EM1', a: 'EM1', y: 1999, c: '日本', cy: 4, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 160 },
+  { n: 'Honda S2000 CR', zh: '本田 S2000 CR', a: 'AP2', y: 2008, c: '日本', cy: 4, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 237 },
+  { n: 'Honda Prelude Si VTEC BB4', zh: '本田 序曲 Si VTEC BB4', a: 'BB4', y: 1992, c: '日本', cy: 4, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 200 },
+  { n: 'Honda NSX Type S Zero', zh: '本田 NSX Type S Zero', a: 'NA2', y: 1997, c: '日本', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 280 },
+  { n: 'Mazda Cosmo AP', zh: '马自达 宇宙 AP', a: 'CD22', y: 1975, c: '日本', cy: 2, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 125 },
+  { n: 'Mazda MX-6 LS', zh: '马自达 MX-6 LS', a: 'GE', y: 1993, c: '日本', cy: 6, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 164 },
+  { n: 'Subaru XT6', zh: '斯巴鲁 XT6', y: 1988, c: '日本', cy: 6, d: 2, b: '轿跑', dr: '四驱', asp: '自然吸气', hp: 145 },
+  { n: 'Subaru Legacy 2.5GT spec.B', zh: '斯巴鲁 力狮 2.5GT spec.B', a: 'BL5', y: 2006, c: '日本', cy: 4, d: 4, b: '轿车', dr: '四驱', asp: '涡轮增压', hp: 250 },
+  { n: 'Mitsubishi Minica Dangan ZZ', zh: '三菱 Minica Dangan ZZ', y: 1989, c: '日本', cy: 3, d: 2, b: '掀背', dr: '前驱', asp: '涡轮增压', hp: 64 },
+  { n: 'Mitsubishi Mirage Cyborg R', zh: '三菱 幻影 Cyborg R', a: 'CA4A', y: 1993, c: '日本', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '自然吸气', hp: 175 },
+  { n: 'Mitsubishi Lancer EX 2000 Turbo', zh: '三菱 蓝瑟 EX 2000 涡轮', y: 1981, c: '日本', cy: 4, d: 2, b: '轿车', dr: '后驱', asp: '涡轮增压', hp: 170 },
+  { n: 'Suzuki Kizashi Sport', zh: '铃木 凯泽西 运动版', y: 2010, c: '日本', cy: 4, d: 4, b: '轿车', dr: '四驱', asp: '自然吸气', hp: 185 },
+  { n: 'Lexus GS 350 F Sport', zh: '雷克萨斯 GS 350 F Sport', a: 'GRL10', y: 2013, c: '日本', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 306 },
+  { n: 'Lexus RC 350 F Sport', zh: '雷克萨斯 RC 350 F Sport', a: 'GSC10', y: 2014, c: '日本', cy: 6, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 306 },
+  { n: 'Infiniti M45', zh: '英菲尼迪 M45', a: 'Y34', y: 2003, c: '日本', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 340 },
+  { n: 'Infiniti G37 Coupe', zh: '英菲尼迪 G37 Coupe', a: 'V36', y: 2008, c: '日本', cy: 6, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 330 },
+  { n: 'Hyundai Genesis 5.0 R-Spec', zh: '现代 捷恩斯 5.0 R-Spec', a: 'BH', y: 2012, c: '韩国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 429 },
+  { n: 'Hyundai Tiburon GT V6', zh: '现代 酷派 GT V6', a: 'GK', y: 2003, c: '韩国', cy: 6, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 181 },
+  { n: 'Hyundai Veloster Turbo', zh: '现代 飞思 涡轮', a: 'FS', y: 2013, c: '韩国', cy: 4, d: 2, b: '掀背', dr: '前驱', asp: '涡轮增压', hp: 201 },
+  { n: 'Hyundai Ioniq 6 AWD', zh: '现代 Ioniq 6 四驱', a: 'CE', y: 2023, c: '韩国', cy: 0, d: 4, b: '轿车', dr: '四驱', asp: '电动', hp: 320 },
+  { n: 'Genesis GV70 Electrified', zh: '捷尼赛思 GV70 电动版', a: 'JK', y: 2023, c: '韩国', cy: 0, d: 4, b: 'SUV', dr: '四驱', asp: '电动', hp: 429 },
+  { n: 'Kia Forte Koup SX', zh: '起亚 Forte Koup SX', a: 'YD', y: 2014, c: '韩国', cy: 4, d: 2, b: '轿跑', dr: '前驱', asp: '自然吸气', hp: 201 },
+  { n: 'Kia ProCeed GT', zh: '起亚 ProCeed GT', a: 'CD', y: 2019, c: '韩国', cy: 4, d: 4, b: '掀背', dr: '前驱', asp: '涡轮增压', hp: 204 },
+  { n: 'Kia EV6 GT-Line AWD', zh: '起亚 EV6 GT-Line 四驱', a: 'CV', y: 2022, c: '韩国', cy: 0, d: 4, b: '掀背', dr: '四驱', asp: '电动', hp: 320 },
+  { n: 'Ford Torino Cobra', zh: '福特 Torino Cobra', a: 'Torino', y: 1970, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 370 },
+  { n: 'Ford Fairlane Thunderbolt', zh: '福特 Fairlane Thunderbolt', a: 'Thunderbolt', y: 1964, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 425 },
+  { n: 'Ford Thunderbird (1957)', zh: '福特 雷鸟 1957', a: 'T-Bird', y: 1957, c: '美国', cy: 8, d: 2, b: '敞篷', dr: '后驱', asp: '机械增压', hp: 300 },
+  { n: 'Ford Mustang SVT Cobra R', zh: '福特 野马 SVT Cobra R', y: 2000, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 385 },
+  { n: 'Ford Mustang Bullitt (2019)', zh: '福特 野马 Bullitt 2019', y: 2019, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 480 },
+  { n: 'Shelby GT500KR (2008)', zh: '谢尔比 GT500KR 2008', a: 'GT500KR', y: 2008, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '机械增压', hp: 540 },
+  { n: 'Shelby Cobra 289', zh: '谢尔比 Cobra 289', y: 1964, c: '美国', cy: 8, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 271 },
+  { n: 'Chevrolet Bel Air (1957)', zh: '雪佛兰 贝尔艾尔 1957', y: 1957, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 283 },
+  { n: 'Chevrolet Corvette Grand Sport (2017)', zh: '雪佛兰 科尔维特 Grand Sport 2017', y: 2017, c: '美国', cy: 8, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 460 },
+  { n: 'Chevrolet Yenko Camaro', zh: '雪佛兰 Yenko 科迈罗', y: 1969, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 450 },
+  { n: 'Dodge Challenger SRT8 392', zh: '道奇 挑战者 SRT8 392', y: 2011, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 470 },
+  { n: 'Dodge Demon 340', zh: '道奇 Demon 340', y: 1971, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 275 },
+  { n: 'Oldsmobile 442 W-30', zh: '奥兹莫比尔 442 W-30', y: 1970, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 370 },
+  { n: 'AMC Javelin AMX', zh: 'AMC Javelin AMX', y: 1971, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 330 },
+  { n: 'Cadillac CT6-V Blackwing', zh: '凯迪拉克 CT6-V 黑翼', y: 2019, c: '美国', cy: 8, d: 4, b: '轿车', dr: '四驱', asp: '双涡轮', hp: 550 },
+  { n: 'SSC Ultimate Aero', zh: 'SSC Ultimate Aero', y: 2007, c: '美国', cy: 8, d: 2, b: '超级跑车', dr: '后驱', asp: '双涡轮', hp: 1183 },
+  { n: 'Saleen S281 Extreme', zh: '赛麟 S281 Extreme', y: 2006, c: '美国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '机械增压', hp: 550 },
+  { n: 'Lotus Carlton', zh: '路特斯 Carlton', y: 1990, c: '英国', cy: 6, d: 4, b: '轿车', dr: '后驱', asp: '双涡轮', hp: 377 },
+  { n: 'Lotus Cortina', zh: '路特斯 Cortina', y: 1963, c: '英国', cy: 4, d: 2, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 105 },
+  { n: 'Jaguar XKSS', zh: '捷豹 XKSS', y: 1957, c: '英国', cy: 6, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 250 },
+  { n: 'Aston Martin Lagonda', zh: '阿斯顿马丁 Lagonda', y: 1976, c: '英国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '自然吸气', hp: 280 },
+  { n: 'Aston Martin Virage (1989)', zh: '阿斯顿马丁 Virage 1989', y: 1989, c: '英国', cy: 8, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 330 },
+  { n: 'Bentley Arnage T', zh: '宾利 雅致 T', y: 2002, c: '英国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '双涡轮', hp: 450 },
+  { n: 'Rolls-Royce Dawn', zh: '劳斯莱斯 曜影', y: 2015, c: '英国', cy: 12, d: 2, b: '敞篷', dr: '后驱', asp: '双涡轮', hp: 563 },
+  { n: 'McLaren 750S', zh: '迈凯伦 750S', y: 2023, c: '英国', cy: 8, d: 2, b: '超级跑车', dr: '后驱', asp: '双涡轮', hp: 740 },
+  { n: 'TVR T350', zh: 'TVR T350', y: 2003, c: '英国', cy: 6, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 350 },
+  { n: 'Morgan AeroMax', zh: '摩根 AeroMax', y: 2008, c: '英国', cy: 8, d: 2, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 362 },
+  { n: 'Rover SD1 Vitesse', zh: '罗孚 SD1 Vitesse', y: 1982, c: '英国', cy: 8, d: 4, b: '掀背', dr: '后驱', asp: '自然吸气', hp: 190 },
+  { n: 'Sunbeam Tiger', zh: '阳光 Tiger', y: 1964, c: '英国', cy: 8, d: 2, b: '敞篷', dr: '后驱', asp: '自然吸气', hp: 164 },
+  { n: 'Sunbeam Lotus', zh: '阳光 Lotus', y: 1979, c: '英国', cy: 4, d: 2, b: '掀背', dr: '后驱', asp: '自然吸气', hp: 150 },
+  { n: 'Jensen FF', zh: '詹森 FF', y: 1966, c: '英国', cy: 8, d: 2, b: '轿跑', dr: '四驱', asp: '自然吸气', hp: 330 },
+  { n: 'Lister Storm', zh: '李斯特 Storm', y: 1993, c: '英国', cy: 12, d: 2, b: '轿跑', dr: '后驱', asp: '自然吸气', hp: 546 },
+  { n: 'Ariel Nomad', zh: '艾瑞欧 Nomad', y: 2015, c: '英国', cy: 4, d: 0, b: '跑车', dr: '后驱', asp: '自然吸气', hp: 235 },
+  { n: 'Mini Countryman JCW', zh: '迷你 Countryman JCW', y: 2020, c: '英国', cy: 4, d: 4, b: 'SUV', dr: '四驱', asp: '涡轮增压', hp: 301 },
+  { n: 'Cadillac CTS-V 2009', zh: '凯迪拉克 CTS-V 2009', a: 'CTS-V V2', y: 2009, c: '美国', cy: 8, d: 4, b: '轿车', dr: '后驱', asp: '机械增压', hp: 556 },
+  { n: 'McLaren Solus GT', zh: '迈凯伦 Solus GT', a: 'Solus', y: 2022, c: '英国', cy: 10, d: 1, b: '超级跑车', dr: '后驱', asp: '自然吸气', hp: 829 },
+  { n: 'KTM X-Bow GT-XR', zh: 'KTM X-Bow GT-XR', a: 'GT-XR', y: 2021, c: '奥地利', cy: 5, d: 1, b: '跑车', dr: '后驱', asp: '涡轮增压', hp: 493 },
 ];
 
-const COUNTRIES = ['德国', '日本', '美国', '意大利', '英国', '法国', '瑞典', '韩国', '中国', '捷克', '西班牙'];
+const COUNTRIES = ['德国', '日本', '美国', '意大利', '英国', '法国', '瑞典', '韩国', '中国', '捷克', '西班牙', '奥地利'];
 const BODIES = ['轿跑', '跑车', '超级跑车', '轿车', '掀背', '敞篷', '旅行车', 'SUV', '皮卡'];
 const DRIVES = ['前驱', '后驱', '四驱'];
 const ASPS = ['自然吸气', '涡轮增压', '双涡轮', '多涡轮', '机械增压', '机械+涡轮', '电动'];
 
 // 国别"接近"规则：同大区算接近
 const REGION = {
-  德国: '欧洲', 英国: '欧洲', 意大利: '欧洲', 法国: '欧洲', 瑞典: '欧洲', 捷克: '欧洲', 西班牙: '欧洲',
+  德国: '欧洲', 英国: '欧洲', 意大利: '欧洲', 法国: '欧洲', 瑞典: '欧洲', 捷克: '欧洲', 西班牙: '欧洲', 奥地利: '欧洲',
   日本: '亚洲', 韩国: '亚洲', 中国: '亚洲',
   美国: '北美',
 };
@@ -1131,12 +1268,18 @@ function haystack(c) {
   return normalize(c.y + ' ' + c.n + ' ' + c.zh + ' ' + (c.a || ''));
 }
 
-// 按车名 / 中文名 / 车架代号 / 年款 模糊搜索，按命中位置排序
-function search(q, limit = 12) {
+// 困难模式用的检索串：只有车名 / 中文名 / 车架代号，按年份搜不到任何车
+function namesOnly(c) {
+  return normalize(c.n + ' ' + c.zh + ' ' + (c.a || ''));
+}
+
+// 按车名 / 中文名 / 车架代号 / 年款 模糊搜索，按命中位置排序；hard=true 时禁用年款检索
+function search(q, limit = 12, hard = false) {
   const n = normalize(q);
   if (!n) return [];
-  const out = CARS.filter((c) => haystack(c).includes(n));
-  out.sort((x, y) => (haystack(x).indexOf(n) - haystack(y).indexOf(n)) || x.n.localeCompare(y.n));
+  const key = hard ? namesOnly : haystack;
+  const out = CARS.filter((c) => key(c).includes(n));
+  out.sort((x, y) => (key(x).indexOf(n) - key(y).indexOf(n)) || x.n.localeCompare(y.n));
   return out.slice(0, limit);
 }
 

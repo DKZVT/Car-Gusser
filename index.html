@@ -21,11 +21,21 @@
   .checker{height:13px;background:repeating-conic-gradient(var(--gold) 0% 25%,#0d0d10 0% 50%) 0 0/13px 13px}
   .wrap{max-width:980px;margin:0 auto;padding:0 12px}
 
-  header{display:flex;align-items:center;gap:10px;padding:14px 0 4px}
+  header{display:flex;align-items:center;gap:10px;padding:14px 0 4px;flex-wrap:wrap}
   .logo{font-size:25px;font-weight:900;font-style:italic;letter-spacing:.04em;white-space:nowrap}
   .logo b{color:var(--gold)}
   .logo em{font-style:italic;color:#ff4d4d}
   header .spacer{flex:1}
+  .chip{
+    display:inline-flex;align-items:center;border:1px solid #3a3a44;background:#141418;color:#c9c9d4;
+    border-radius:999px;padding:6px 12px;font:700 12px/1 inherit;letter-spacing:.04em;cursor:pointer;
+    white-space:nowrap;user-select:none;transition:border-color .15s,color .15s,background .15s
+  }
+  .chip:hover{border-color:#606070;color:var(--txt)}
+  .chip.on{border-color:var(--gold);color:var(--gold);background:#1d1a08}
+  .chip input{accent-color:var(--gold);margin:0 5px 0 0;vertical-align:-1px}
+  .bar{min-height:16px;margin:2px 0 10px;text-align:center;color:#b9b9c6;font-size:12px;letter-spacing:.04em}
+  @media(max-width:520px){ .chip{padding:5px 9px;font-size:11px} header{gap:7px} }
   .icon{
     width:36px;height:36px;border-radius:50%;border:2px solid #3a3a44;background:transparent;
     color:#9a9aa6;font:700 15px/1 system-ui;cursor:pointer
@@ -194,11 +204,14 @@
   <header>
     <div class="logo">PIT <b>LANE</b> <em>猜车</em></div>
     <div class="spacer"></div>
+    <button class="chip" id="dailyBtn" title="每天固定 5 台车，所有人同一天是同一套题">每日 5 题</button>
+    <label class="chip" id="hardChip" title="困难模式：不能按年份检索车型"><input type="checkbox" id="hard">困难</label>
     <button class="icon" id="help" title="玩法">?</button>
   </header>
   <div class="rule-line"></div>
 
   <p class="lede">猜一台<b>性能车</b>。每项属性都会告诉你离答案有多近。</p>
+  <div id="bar" class="bar"></div>
 
   <div class="sel">
     <input id="q" placeholder="输入车名或车架代号，如：E46 / R34 / 205 T16" autocomplete="off" spellcheck="false">
@@ -249,11 +262,13 @@
         <tr><th>年款</th><td>生产年份，相差 ±5 年内算接近</td></tr>
         <tr><th>国别</th><td>原产国，同一大区算接近（欧洲 / 亚洲 / 北美）</td></tr>
         <tr><th>气缸</th><td>气缸数，相差 ±2 算接近；转子发动机记转子数；纯电车为 0</td></tr>
-        <tr><th>车门数</th><td>只数乘员门，不把后备箱门/尾门算进去（3 门掀背记 2，5 门掀背/SUV/旅行车记 4）</td></tr>
+        <tr><th>车门数</th><td>只数乘员门，不把后备箱门/尾门算进去（3 门掀背记 2，5 门掀背/SUV/旅行车记 4）；没有乘员门的开放式车记 0，<b>单体壳赛车只能掀开车顶钻进去的记 1</b>（如 Solus GT、X-Bow GT-XR）</td></tr>
         <tr><th>车种</th><td>轿跑 / 跑车 / 超级跑车 / 轿车 / 掀背 / 敞篷 / 旅行车 / SUV / 皮卡（门数另有单独一栏，车种不再重复写"双门"）</td></tr>
         <tr><th>驱动</th><td>前驱 / 后驱 / 四驱，必须完全一致</td></tr>
         <tr><th>进气</th><td>自然吸气 / 涡轮增压 / 双涡轮 / <b>多涡轮</b>（四涡轮以上，如布加迪 W16）/ 机械增压 / <b>机械+涡轮</b>（双增压，如 Delta S4、沃尔沃 T8）/ 电动</td></tr>
         <tr><th>马力</th><td>曲轴马力，相差 ±50 匹内算接近</td></tr>
+        <tr><th>每日 5 题</th><td>顶部按钮。按日期出题，同一天所有人都是同一套 5 台车，每天 0 点换题，进度会自动存着</td></tr>
+        <tr><th>困难模式</th><td>顶部开关。开了之后搜索框<b>不能按年份找车</b>，只能按车名 / 中文名 / 车架代号搜</td></tr>
       </table>
       <div class="btns"><button class="pri" id="startPlay">开始猜车</button></div>
       <div style="margin-top:12px"><button class="linklike" id="openNews">查看本次更新内容 ›</button></div>
@@ -265,20 +280,20 @@
 <div id="announce">
   <div class="sheet">
     <div class="sheet-hd">
-      <h3>更 新 公 告 <span style="font-size:12px;color:#8a8a95;font-weight:400;letter-spacing:0;margin-left:6px">v1077</span></h3>
+      <h3>更 新 公 告 <span style="font-size:12px;color:#8a8a95;font-weight:400;letter-spacing:0;margin-left:6px">v1214</span></h3>
       <button class="x" id="closeAnnounce" aria-label="关闭">✕</button>
     </div>
     <div class="sheet-bd">
-      <p><b style="color:#f5c400">题库扩到 1077 台</b>，车单取自 GT 赛车 / 极限竞速地平线 / 极品飞车系列里真实存在的车型。</p>
+      <p><b style="color:#f5c400">题库扩到 1214 台</b>，并新增两个玩法：<b>每日 5 题</b> 和 <b>困难模式</b>。</p>
       <table class="rules">
-        <tr><th>车种</th><td>拆成 <b>轿跑 / 跑车 / 超级跑车</b>，不再用"双门轿跑"这种把门数塞进车种的写法</td></tr>
-        <tr><th>车门数</th><td>只数<b>乘员门</b>，后备箱门不算：3 门掀背记 2，5 门掀背 / SUV / 旅行车记 4</td></tr>
-        <tr><th>进气</th><td>新增 <b>机械+涡轮</b>（Delta S4、沃尔沃 T8 系）和 <b>多涡轮</b>（布加迪 W16 四涡轮）</td></tr>
-        <tr><th>车种补充</th><td>皮卡回来了：F-150 猛禽 / 闪电、Ram TRX、Tacoma 等 19 台</td></tr>
-        <tr><th>机会</th><td>6 次 → <b>10 次</b></td></tr>
-        <tr><th>手机端</th><td>改成卡片布局，每次猜测一张卡、4×2 属性块，字更大</td></tr>
-        <tr><th>检索</th><td>可以输<b>年份</b>或车架代号局部搜，例如 2003、E46、R34；已猜过的车在下拉里置灰</td></tr>
-        <tr><th>动效</th><td>弹窗淡入淡出、猜测结果逐行淡入、机会点弹跳</td></tr>
+        <tr><th>每日 5 题</th><td>顶部「每日 5 题」按钮。按日期出题，<b>同一天所有人都是同一套 5 台车</b>，每天 0 点换新题；断线/刷新能接着玩，进度存在本地</td></tr>
+        <tr><th>困难模式</th><td>顶部「困难」开关。开了之后<b>搜索框不能按年份找车</b>（输入 2003 不再列出那年的车），只能按车名 / 中文名 / 车架代号搜</td></tr>
+        <tr><th>车门数</th><td>新增 <b>1 门</b>：单体壳赛车只能<b>掀开车顶（或上盖）钻进去</b>的记 1 门——这版加了两台：<b>McLaren Solus GT</b>、<b>KTM X-Bow GT-XR</b>（透明舱盖，钻进去）；没有乘员门的开放式车（Atom / Caterham / Radical 这类）记 0，有侧门的原型赛车记 2</td></tr>
+        <tr><th>新增车单</th><td>德国 30 台（M3 GTS、SL 73 AMG、Opel Lotus Omega、NSU Ro 80…）、美英 35 台（Yenko Camaro、Jensen FF、Lister Storm…）、日韩 35 台（Silvia S12、Century V12、Ioniq 6…）、意法瑞中 35 台（Ferrari 275 GTB/4、Lamborghini Jalpa、Polestar 2 BST…）</td></tr>
+        <tr><th>车门数口径</th><td>只数<b>乘员门</b>，后备箱门不算：3 门掀背记 2，5 门掀背 / SUV / 旅行车记 4</td></tr>
+        <tr><th>进气口径</th><td><b>机械+涡轮</b>（Delta S4、沃尔沃 T8 系）和 <b>多涡轮</b>（布加迪 W16 四涡轮）单独计数</td></tr>
+        <tr><th>机会</th><td><b>10 次</b></td></tr>
+        <tr><th>检索</th><td>自由模式下可以输<b>年份</b>或车架代号局部搜，例如 2003、E46、R34；已猜过的车在下拉里置灰</td></tr>
       </table>
       <div class="btns"><button class="pri" id="startPlay2">知道了，开始猜车</button></div>
     </div>
@@ -291,7 +306,8 @@
   const MAX = 10;
   const $ = (s) => document.querySelector(s);
   const el = { q: $('#q'), go: $('#go'), sug: $('#sug'), msg: $('#msg'), dots: $('#dots'), rows: $('#rows'),
-               cards: $('#cards'), result: $('#result'), cnt: $('#cnt'), modal: $('#modal') };
+               cards: $('#cards'), result: $('#result'), cnt: $('#cnt'), modal: $('#modal'),
+               bar: $('#bar'), dailyBtn: $('#dailyBtn'), hardBox: $('#hard'), hardChip: $('#hardChip') };
 
   let answer = null;
   let prevName = '';
@@ -299,9 +315,58 @@
   let done = false;
   let sel = -1;
   let items = [];
+  let mode = 'free';          // free = 自由模式；daily = 每日 5 题
+  let daily = null;           // { date, names:[5], idx, results:[] }
+  let hard = false;           // 困难模式：搜索框不能按年份检索
   const SKEY = 'pitlane:stats';
+  const DKEY = 'pitlane:daily';
+  const HKEY = 'pitlane:hard';
+  const PLACEHOLDER = '输入车名或车架代号，如：E46 / R34 / 205 T16';
+  const PLACEHOLDER_HARD = '输入车名或车架代号（困难模式：不能按年份检索）';
 
   el.cnt.textContent = CARS.length;
+
+  // ---------- 每日 5 题：日期当种子，同一天所有人同一套题 ----------
+  const todayKey = () => {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  };
+  const hash32 = (s) => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const rng32 = (a) => () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  function dailyNames() {
+    const r = rng32(hash32('pitlane:' + todayKey()));
+    const idx = CARS.map((_, i) => i);
+    for (let i = idx.length - 1; i > 0; i--) {
+      const j = Math.floor(r() * (i + 1));
+      const t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+    }
+    return idx.slice(0, 5).map((i) => CARS[i].n);
+  }
+  const loadDaily = () => { try { return JSON.parse(localStorage.getItem(DKEY) || 'null'); } catch { return null; } };
+  const saveDaily = (d) => { try { localStorage.setItem(DKEY, JSON.stringify(d)); } catch {} };
+  function ensureDaily() {
+    const names = dailyNames();
+    const d = loadDaily();
+    if (!d || d.date !== todayKey() || !Array.isArray(d.names) || d.names.join('|') !== names.join('|')) {
+      const fresh = { date: todayKey(), names, idx: 0, results: [] };
+      saveDaily(fresh);
+      return fresh;
+    }
+    return d;
+  }
+  const carByName = (n) => CARS.find((c) => c.n === n);
+
+  function renderBar() {
+    el.dailyBtn.classList.toggle('on', mode === 'daily');
+    if (mode !== 'daily') { el.bar.textContent = ''; return; }
+    const hit = daily.results.filter(Boolean).length;
+    el.bar.textContent = '每日 5 题 · 第 ' + Math.min(daily.idx + 1, 5) + '/5 题 · 已中 ' + hit + ' 题';
+  }
 
   const stats = () => {
     const def = { played: 0, wins: 0, total: 0 };
@@ -335,13 +400,59 @@
     }
   }
 
-  function nextCar() {
-    answer = pickRandom(prevName);
-    prevName = answer.n;
+  function setAnswer(car) {
+    answer = car;
+    if (mode === 'free') prevName = car.n;
     guesses = []; done = false; sel = -1; items = [];
     el.result.innerHTML = '';
     el.q.value = ''; el.q.disabled = false; el.go.disabled = false;
-    hideSug(); buildEmptyRows(); renderDots();
+    hideSug(); buildEmptyRows(); renderDots(); renderBar();
+  }
+
+  function nextCar() {
+    if (mode === 'daily') return nextDaily();
+    setAnswer(pickRandom(prevName));
+  }
+
+  function nextDaily() {
+    daily.idx++;
+    saveDaily(daily);
+    const car = carByName(daily.names[daily.idx]);
+    if (car) setAnswer(car);
+    else showDailySummary();
+  }
+
+  function startDaily() {
+    mode = 'daily';
+    daily = ensureDaily();
+    el.result.innerHTML = '';
+    if (daily.results.length >= 5) {
+      el.q.disabled = true; el.go.disabled = true;
+      buildEmptyRows(); renderDots(); renderBar(); showDailySummary();
+      return;
+    }
+    setAnswer(carByName(daily.names[daily.idx]));
+  }
+
+  function startFree() {
+    mode = 'free';
+    el.result.innerHTML = '';
+    setAnswer(pickRandom(prevName));
+  }
+
+  function showDailySummary() {
+    const hit = daily.results.filter(Boolean).length;
+    el.q.disabled = true; el.go.disabled = true;
+    el.result.innerHTML = '';
+    const p = document.createElement('div');
+    p.className = 'panel';
+    p.innerHTML = '<h2>今日 5 题完成</h2>' +
+      '<div class="ans">猜中 ' + hit + ' / 5<small>' + daily.date + ' · 每天 0 点换新题</small></div>' +
+      '<div class="btns"><button class="pri" id="backFree">回到自由模式 ▶</button><button id="shareDaily">复制成绩</button></div>';
+    el.result.appendChild(p);
+    p.querySelector('#backFree').onclick = startFree;
+    p.querySelector('#shareDaily').onclick = () => copy('PIT LANE 每日 5 题 ' + daily.date + ' · 猜中 ' + hit + '/5', p.querySelector('#shareDaily'));
+    renderBar();
   }
 
   function fillRow(index, car) {
@@ -397,6 +508,12 @@
     s.played++;
     if (win) { s.wins++; s.total += guesses.length; }
     saveStats(s);
+    if (mode === 'daily') { daily.results[daily.idx] = win; saveDaily(daily); renderBar(); }
+
+    const last = mode === 'daily' && daily.idx >= 4;
+    const nextLabel = mode === 'daily'
+      ? (last ? '查看今日成绩 ▶' : '下一题 ▶ (' + (daily.idx + 2) + '/5)')
+      : '下一台车 ▶';
 
     const p = document.createElement('div');
     p.className = 'panel';
@@ -404,9 +521,9 @@
       '<div class="ans">' + answer.n + '<small>' + answer.zh + '</small></div>' +
       '<div class="specs">' + answer.y + ' 年 · ' + answer.c + ' · ' + (answer.cy || '—') + ' 缸 · ' + answer.d +
       ' 门 · ' + answer.b + ' · ' + answer.dr + ' · ' + answer.asp + ' · ' + answer.hp + ' 匹</div>' +
-      '<div class="btns"><button class="pri" id="next">下一台车 ▶</button><button id="share">复制成绩</button></div>';
+      '<div class="btns"><button class="pri" id="next">' + nextLabel + '</button><button id="share">复制成绩</button></div>';
     el.result.appendChild(p);
-    p.querySelector('#next').onclick = nextCar;
+    p.querySelector('#next').onclick = last ? showDailySummary : nextCar;
     p.querySelector('#share').onclick = () => copy(shareText(win), p.querySelector('#share'));
     const st = stats();
     p.insertAdjacentHTML('beforeend',
@@ -439,7 +556,7 @@
 
   function renderSug() {
     const v = el.q.value.trim();
-    items = v ? search(v, 12) : [];
+    items = v ? search(v, 12, hard) : [];
     sel = -1;
     if (!items.length) { hideSug(); return; }
     // 已经猜过的车直接标成不可选，免得点了没反应像 bug
@@ -490,7 +607,7 @@
   // ---------- 玩法弹窗 + 更新公告（按版本号只弹一次）----------
   const announce = document.getElementById('announce');
   const NEWS_KEY = 'pitlane:news-seen';
-  const NEWS_VERSION = '1077.1';   // 版本号：改题库/规则时递增，公告就会重新弹一次
+  const NEWS_VERSION = '1214.1';   // 版本号：改题库/规则时递增，公告就会重新弹一次
 
   const newsSeen = () => { try { return localStorage.getItem(NEWS_KEY); } catch { return null; } };
   const markNewsSeen = () => { try { localStorage.setItem(NEWS_KEY, NEWS_VERSION); } catch {} };
@@ -518,7 +635,24 @@
     else if (el.modal.classList.contains('open')) closeHelp();
   });
 
-  nextCar();
+  // ---------- 模式切换：每日 5 题 / 困难模式 ----------
+  try { hard = localStorage.getItem(HKEY) === '1'; } catch {}
+  function applyHard() {
+    el.q.placeholder = hard ? PLACEHOLDER_HARD : PLACEHOLDER;
+    el.hardChip.classList.toggle('on', hard);
+    if (el.q.value.trim()) renderSug();
+  }
+  el.hardBox.checked = hard;
+  el.hardBox.onchange = () => {
+    hard = el.hardBox.checked;
+    try { localStorage.setItem(HKEY, hard ? '1' : '0'); } catch {}
+    applyHard();
+    if (!hard) hideSug();
+  };
+  el.dailyBtn.onclick = () => { if (mode === 'daily') startFree(); else startDaily(); };
+
+  applyHard();
+  startFree();
 })();
 </script>
 </body>
