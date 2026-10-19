@@ -280,16 +280,18 @@
 <div id="announce">
   <div class="sheet">
     <div class="sheet-hd">
-      <h3>更 新 公 告 <span style="font-size:12px;color:#8a8a95;font-weight:400;letter-spacing:0;margin-left:6px">v1214</span></h3>
+      <h3>更 新 公 告 <span style="font-size:12px;color:#8a8a95;font-weight:400;letter-spacing:0;margin-left:6px">v1204</span></h3>
       <button class="x" id="closeAnnounce" aria-label="关闭">✕</button>
     </div>
     <div class="sheet-bd">
-      <p><b style="color:#f5c400">题库扩到 1214 台</b>，并新增两个玩法：<b>每日 5 题</b> 和 <b>困难模式</b>。</p>
+      <p><b style="color:#f5c400">题库 1201 台</b>，并新增两个玩法：<b>每日 5 题</b> 和 <b>困难模式</b>。</p>
       <table class="rules">
         <tr><th>每日 5 题</th><td>顶部「每日 5 题」按钮。按日期出题，<b>同一天所有人都是同一套 5 台车</b>，每天 0 点换新题；断线/刷新能接着玩，进度存在本地</td></tr>
         <tr><th>困难模式</th><td>顶部「困难」开关。开了之后<b>搜索框不能按年份找车</b>（输入 2003 不再列出那年的车），只能按车名 / 中文名 / 车架代号搜</td></tr>
         <tr><th>车门数</th><td>新增 <b>1 门</b>：单体壳赛车只能<b>掀开车顶（或上盖）钻进去</b>的记 1 门——这版加了两台：<b>McLaren Solus GT</b>、<b>KTM X-Bow GT-XR</b>（透明舱盖，钻进去）；没有乘员门的开放式车（Atom / Caterham / Radical 这类）记 0，有侧门的原型赛车记 2</td></tr>
         <tr><th>新增车单</th><td>德国 30 台（M3 GTS、SL 73 AMG、Opel Lotus Omega、NSU Ro 80…）、美英 35 台（Yenko Camaro、Jensen FF、Lister Storm…）、日韩 35 台（Silvia S12、Century V12、Ioniq 6…）、意法瑞中 35 台（Ferrari 275 GTB/4、Lamborghini Jalpa、Polestar 2 BST…）</td></tr>
+        <tr><th>车种纠错</th><td>这几台本来就该是<b>超级跑车</b>：仰望 U9、蔚来 EP9、红旗 S9、Aion Hyper SSR、Aston Martin Valhalla、Ferrari 12Cilindri、Ferrari F12tdf、911 GT2 RS Clubsport、911 GT3 RS 991/996</td></tr>
+        <tr><th>数据纠错</th><td>AMG GT 四门 63 马力 630 → <b>585 匹</b>（639 匹是 63 S）；918 Spyder Weissach 车种与普通版对齐；福特欧洲三台（Escort RS1800 / RS2000、Sierra RS Cosworth）国别由美国改英国；清掉 13 处「同一台车两条」——GT 63 S 四门、Copen L880K、森林人 STI SG9、E 63 S W213、野马 GT S550、RS7 C7、雨燕 Sport ZC33S、G 63 W463、CR-X SiR EF8、IS 300 XE10、300 SL W198、A 45 W176、300 SEL 6.8 AMG（车架代号已并进别名，仍能按代号搜）</td></tr>
         <tr><th>车门数口径</th><td>只数<b>乘员门</b>，后备箱门不算：3 门掀背记 2，5 门掀背 / SUV / 旅行车记 4</td></tr>
         <tr><th>进气口径</th><td><b>机械+涡轮</b>（Delta S4、沃尔沃 T8 系）和 <b>多涡轮</b>（布加迪 W16 四涡轮）单独计数</td></tr>
         <tr><th>机会</th><td><b>10 次</b></td></tr>
@@ -607,7 +609,7 @@
   // ---------- 玩法弹窗 + 更新公告（按版本号只弹一次）----------
   const announce = document.getElementById('announce');
   const NEWS_KEY = 'pitlane:news-seen';
-  const NEWS_VERSION = '1214.1';   // 版本号：改题库/规则时递增，公告就会重新弹一次
+  const NEWS_VERSION = '1214.4';   // 版本号：改题库/规则时递增，公告就会重新弹一次
 
   const newsSeen = () => { try { return localStorage.getItem(NEWS_KEY); } catch { return null; } };
   const markNewsSeen = () => { try { localStorage.setItem(NEWS_KEY, NEWS_VERSION); } catch {} };
