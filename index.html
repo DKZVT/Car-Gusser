@@ -45,24 +45,54 @@
   #q:disabled{opacity:.5}
   #go{
     padding:0 26px;border:0;border-radius:3px;background:var(--gold);color:#151204;
-    font:900 15px/1 inherit;letter-spacing:.14em;cursor:pointer;white-space:nowrap
+    font:900 15px/1 inherit;letter-spacing:.14em;cursor:pointer;white-space:nowrap;
+    transition:background .15s,transform .08s
   }
+  #go:active:not(:disabled){transform:translateY(1px)}
   #go:disabled{background:#5f5626;color:#3a3a3a;cursor:default}
   #sug{
     position:absolute;z-index:30;left:0;right:112px;top:calc(100% + 5px);margin:0;padding:5px;
     list-style:none;background:#1b1b21;border:1px solid #34343e;border-radius:4px;
-    max-height:380px;overflow:auto;display:none;box-shadow:0 20px 44px #000b
+    max-height:380px;overflow:auto;box-shadow:0 20px 44px #000b;
+    opacity:0;transform:translateY(-5px);pointer-events:none;visibility:hidden;
+    transition:opacity .14s ease,transform .14s ease,visibility .14s
   }
-  #sug.open{display:block}
-  #sug li{padding:9px 10px;border-radius:3px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+  #sug.open{opacity:1;transform:none;visibility:visible;pointer-events:auto}
+  #sug li{padding:9px 10px;border-radius:3px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;min-width:0}
   #sug li.sel,#sug li:hover{background:#2c2c36}
-  #sug li em{color:var(--dim);font-style:normal;font-size:12px;white-space:nowrap}
+  #sug li b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #sug li em{color:var(--dim);font-style:normal;font-size:12px;white-space:nowrap;flex:0 0 auto}
 
   .dots{display:flex;gap:7px;justify-content:center;margin:13px 0}
-  .dots i{width:11px;height:11px;border-radius:50%;border:2px solid #3c3c46}
-  .dots i.used{border-color:var(--gold);background:var(--gold)}
+  .dots i{
+    width:11px;height:11px;border-radius:50%;border:2px solid #3c3c46;
+    transition:background .16s ease,border-color .16s ease,transform .16s ease
+  }
+  .dots i.used{border-color:var(--gold);background:var(--gold);animation:dotPop .24s ease-out}
 
   .tablewrap{overflow-x:auto;padding-bottom:4px}
+
+  /* 手机端：每猜一次一张卡片，4×2 属性块（跟原站一致） */
+  .cards{display:none}
+  .card{border:1px solid #26262e;border-radius:5px;overflow:hidden;background:#131318;margin-bottom:10px}
+  .card-empty{height:76px;background:#0f0f14;border-style:dashed;border-color:#23232b}
+  .card-hd{background:#1d1d24;padding:11px 12px;font-weight:800;font-size:15px;line-height:1.25}
+  .card-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;background:#0a0a0c}
+  .tile{
+    background:#17171c;padding:8px 3px 7px;text-align:center;min-height:74px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px
+  }
+  .tile span{font-size:10px;letter-spacing:.1em;opacity:.8;line-height:1}
+  .tile b{font-size:16px;font-weight:800;line-height:1.15;word-break:break-word}
+  .tile i{font-style:normal;font-size:11px;line-height:1;opacity:.9}
+  .tile.hit{background:var(--hit);color:#fff}
+  .tile.near{background:var(--near);color:#1a1503}
+  .tile.miss{background:var(--miss);color:#fff}
+  .card.win{border-color:#7cea9d}
+  @media(max-width:760px){
+    .desk{display:none}
+    .cards{display:block}
+  }
   table.grid{border-collapse:separate;border-spacing:3px 3px;width:100%;min-width:720px;table-layout:fixed}
   table.grid th{
     color:#b6b6c2;font-size:12px;font-weight:700;letter-spacing:.1em;text-align:center;
@@ -103,14 +133,19 @@
   .btns button.pri{background:var(--gold);border-color:var(--gold);color:#151204;font-weight:800}
   .foot{color:#4f4f5a;font-size:12px;margin-top:18px;text-align:center}
 
-  /* 玩法弹窗：打开网站自动弹出 */
-  #modal{position:fixed;inset:0;background:#000d;display:none;align-items:flex-start;justify-content:center;
-         padding:24px 14px;z-index:60;overflow:auto}
-  #modal.open{display:flex}
+  /* 玩法弹窗：打开网站自动弹出（淡入淡出） */
+  #modal{position:fixed;inset:0;background:#000d;display:flex;align-items:flex-start;justify-content:center;
+         padding:24px 14px;z-index:60;overflow:auto;
+         opacity:0;visibility:hidden;pointer-events:none;
+         transition:opacity .22s ease,visibility .22s}
+  #modal.open{opacity:1;visibility:visible;pointer-events:auto}
   .sheet{
     background:#141418;border:1px solid #2e2e38;border-radius:6px;width:100%;max-width:560px;
-    box-shadow:0 30px 80px #000c
+    box-shadow:0 30px 80px #000c;
+    opacity:0;transform:translateY(16px) scale(.985);
+    transition:opacity .26s ease,transform .26s cubic-bezier(.2,.75,.3,1)
   }
+  #modal.open .sheet{opacity:1;transform:none}
   .sheet-hd{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:2px solid var(--gold)}
   .sheet-hd h3{margin:0;font-size:21px;letter-spacing:.1em;color:var(--gold);font-weight:900;flex:1}
   .sheet-hd .x{background:none;border:0;color:#9c9caa;font:400 22px/1 system-ui;cursor:pointer}
@@ -125,6 +160,19 @@
   table.rules th,table.rules td{text-align:left;vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #23232c}
   table.rules th{color:var(--gold);white-space:nowrap;width:64px;font-weight:800;letter-spacing:.04em}
   table.rules td{color:#b6b6c2}
+  /* ---------- 过渡动画 ---------- */
+  @keyframes riseIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  @keyframes dotPop{0%{transform:scale(.55)}65%{transform:scale(1.28)}100%{transform:scale(1)}}
+  tr.r-filled{animation:riseIn .2s ease-out both}
+  .card:not(.card-empty){animation:riseIn .22s ease-out both}
+  .panel{animation:riseIn .24s ease-out both}
+  .card{transition:border-color .2s ease}
+  .btns button,.icon,.sheet-hd .x{transition:background .15s,border-color .15s,color .15s,transform .08s}
+  .btns button:active{transform:translateY(1px)}
+  @media (prefers-reduced-motion:reduce){
+    *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  }
+
   @media(max-width:520px){
     .logo{font-size:20px}
     table.grid{min-width:660px}
@@ -153,7 +201,7 @@
 
   <div class="dots" id="dots"></div>
 
-  <div class="tablewrap">
+  <div class="tablewrap desk">
     <table class="grid">
       <colgroup>
         <col style="width:210px">
@@ -168,6 +216,8 @@
       <tbody id="rows"></tbody>
     </table>
   </div>
+
+  <div class="cards mob" id="cards"></div>
 
   <div id="result"></div>
   <div class="foot">共 10 次机会 · 猜对或猜满就换下一台车 · 题库 <span id="cnt">0</span> 台（数据为约值，仅供娱乐）</div>
@@ -208,7 +258,7 @@
   const MAX = 10;
   const $ = (s) => document.querySelector(s);
   const el = { q: $('#q'), go: $('#go'), sug: $('#sug'), dots: $('#dots'), rows: $('#rows'),
-               result: $('#result'), cnt: $('#cnt'), modal: $('#modal') };
+               cards: $('#cards'), result: $('#result'), cnt: $('#cnt'), modal: $('#modal') };
 
   let answer = null;
   let prevName = '';
@@ -235,13 +285,20 @@
     }
   }
 
+  // 桌面端是表格、手机端是卡片，两种视图同步渲染（窄屏用 CSS 切换显示）
   function buildEmptyRows() {
     el.rows.innerHTML = '';
+    el.cards.innerHTML = '';
     for (let i = 0; i < MAX; i++) {
       const tr = document.createElement('tr');
       tr.className = 'r-empty';
       tr.innerHTML = '<td class="cname">第 ' + (i + 1) + ' 猜</td>' + ATTRS.map(() => '<td>·</td>').join('');
       el.rows.appendChild(tr);
+
+      const card = document.createElement('div');
+      card.className = 'card card-empty';
+      card.dataset.i = String(i);
+      el.cards.appendChild(card);
     }
   }
 
@@ -255,13 +312,31 @@
   }
 
   function fillRow(index, car) {
+    const cells = compare(car, answer);
+
+    // 桌面：表格一行
     const tr = el.rows.children[index];
     tr.className = 'r-filled' + (car.n === answer.n ? ' win' : '');
     tr.innerHTML = '<td class="cname">' + car.y + ' ' + car.n + '<small>' + car.zh + '</small></td>' +
-      compare(car, answer).map((r) => {
+      cells.map((r) => {
         const arrow = r.dir === 1 ? '<span class="arrow">↑</span>' : r.dir === -1 ? '<span class="arrow">↓</span>' : '';
         return '<td class="' + r.state + '">' + car[r.key] + arrow + '</td>';
       }).join('');
+
+    // 手机：一张卡片 + 4×2 属性块
+    const card = el.cards.children[index];
+    card.className = 'card' + (car.n === answer.n ? ' win' : '');
+    card.innerHTML = '<div class="card-hd">' + car.y + ' ' + car.n + '</div><div class="card-grid">' +
+      cells.map((r) => {
+        const a = ATTRS.find((x) => x.key === r.key);
+        const arrow = r.dir === 1 ? '<i>↑</i>' : r.dir === -1 ? '<i>↓</i>' : '';
+        return '<div class="tile ' + r.state + '"><span>' + a.short + '</span><b>' + car[r.key] + '</b>' + arrow + '</div>';
+      }).join('') + '</div>';
+
+    // 刚填的那一行/那张卡滚进视野（已可见时不会动）
+    const narrow = window.matchMedia('(max-width:760px)').matches;
+    const calm = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    (narrow ? card : tr).scrollIntoView({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' });
   }
 
   function submit(car) {

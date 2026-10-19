@@ -582,14 +582,14 @@ const REGION = {
 
 // 判定规则：num 类给容差（等价区间），其余要求完全一致
 const ATTRS = [
-  { key: 'y', label: '年款', type: 'num', tol: 5 },
-  { key: 'c', label: '国别', type: 'region' },
-  { key: 'cy', label: '气缸', type: 'num', tol: 2 },
-  { key: 'd', label: '车门数', type: 'exact' },
-  { key: 'b', label: '车种', type: 'exact' },
-  { key: 'dr', label: '驱动', type: 'exact' },
-  { key: 'asp', label: '进气', type: 'exact' },
-  { key: 'hp', label: '马力', type: 'num', tol: 50 },
+  { key: 'y', label: '年款', short: '年款', type: 'num', tol: 5 },
+  { key: 'c', label: '国别', short: '国别', type: 'region' },
+  { key: 'cy', label: '气缸', short: '气缸', type: 'num', tol: 2 },
+  { key: 'd', label: '车门数', short: '车门', type: 'exact' },
+  { key: 'b', label: '车种', short: '车种', type: 'exact' },
+  { key: 'dr', label: '驱动', short: '驱动', type: 'exact' },
+  { key: 'asp', label: '进气', short: '进气', type: 'exact' },
+  { key: 'hp', label: '马力', short: '马力', type: 'num', tol: 50 },
 ];
 
 // 返回每项的 state(hit/near/miss) 与 dir(1=答案更大更晚, -1=更小更早, 0=相等)
