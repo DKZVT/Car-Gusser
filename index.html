@@ -63,8 +63,7 @@
   #sug li b{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   #sug li em{color:var(--dim);font-style:normal;font-size:12px;white-space:nowrap;flex:0 0 auto}
 
-  .dots{display:flex;gap:7px;justify-content:center;margin:13px 0}
-  .dots i{
+  .dots{display:flex;gap:7px;justify-content:center;margin:13px 0}  .dots i{
     width:11px;height:11px;border-radius:50%;border:2px solid #3c3c46;
     transition:background .16s ease,border-color .16s ease,transform .16s ease
   }
@@ -132,20 +131,28 @@
   }
   .btns button.pri{background:var(--gold);border-color:var(--gold);color:#151204;font-weight:800}
   .foot{color:#4f4f5a;font-size:12px;margin-top:18px;text-align:center}
+  .linklike{background:none;border:0;padding:0;color:var(--gold);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;opacity:.85}
+  .linklike:hover{opacity:1}
+  .msg{min-height:18px;margin:7px 2px 0;font-size:12px;color:var(--gold);letter-spacing:.02em}
+  #sug li.taken{opacity:.5;cursor:not-allowed}
+  #sug li.taken b{text-decoration:line-through}
+  #sug li.taken em{color:var(--gold);opacity:.9}
 
-  /* 玩法弹窗：打开网站自动弹出（淡入淡出） */
-  #modal{position:fixed;inset:0;background:#000d;display:flex;align-items:flex-start;justify-content:center;
-         padding:24px 14px;z-index:60;overflow:auto;
+  /* 玩法和公告弹窗共用的遮罩（淡入淡出） */
+  #modal, #announce{position:fixed;inset:0;background:#000d;display:flex;align-items:flex-start;justify-content:center;
+         padding:24px 14px;overflow:auto;
          opacity:0;visibility:hidden;pointer-events:none;
          transition:opacity .22s ease,visibility .22s}
-  #modal.open{opacity:1;visibility:visible;pointer-events:auto}
+  #modal{z-index:60}
+  #announce{z-index:61}
+  #modal.open, #announce.open{opacity:1;visibility:visible;pointer-events:auto}
   .sheet{
     background:#141418;border:1px solid #2e2e38;border-radius:6px;width:100%;max-width:560px;
     box-shadow:0 30px 80px #000c;
     opacity:0;transform:translateY(16px) scale(.985);
     transition:opacity .26s ease,transform .26s cubic-bezier(.2,.75,.3,1)
   }
-  #modal.open .sheet{opacity:1;transform:none}
+  #modal.open .sheet, #announce.open .sheet{opacity:1;transform:none}
   .sheet-hd{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:2px solid var(--gold)}
   .sheet-hd h3{margin:0;font-size:21px;letter-spacing:.1em;color:var(--gold);font-weight:900;flex:1}
   .sheet-hd .x{background:none;border:0;color:#9c9caa;font:400 22px/1 system-ui;cursor:pointer}
@@ -198,6 +205,7 @@
     <button id="go">猜</button>
     <ul id="sug"></ul>
   </div>
+  <div id="msg" class="msg"></div>
 
   <div class="dots" id="dots"></div>
 
@@ -241,13 +249,38 @@
         <tr><th>年款</th><td>生产年份，相差 ±5 年内算接近</td></tr>
         <tr><th>国别</th><td>原产国，同一大区算接近（欧洲 / 亚洲 / 北美）</td></tr>
         <tr><th>气缸</th><td>气缸数，相差 ±2 算接近；转子发动机记转子数；纯电车为 0</td></tr>
-        <tr><th>车门数</th><td>车门数量，必须完全一致</td></tr>
+        <tr><th>车门数</th><td>只数乘员门，不把后备箱门/尾门算进去（3 门掀背记 2，5 门掀背/SUV/旅行车记 4）</td></tr>
         <tr><th>车种</th><td>轿跑 / 跑车 / 超级跑车 / 轿车 / 掀背 / 敞篷 / 旅行车 / SUV / 皮卡（门数另有单独一栏，车种不再重复写"双门"）</td></tr>
         <tr><th>驱动</th><td>前驱 / 后驱 / 四驱，必须完全一致</td></tr>
-        <tr><th>进气</th><td>自然吸气 / 涡轮增压 / 双涡轮 / 机械增压 / 电动</td></tr>
+        <tr><th>进气</th><td>自然吸气 / 涡轮增压 / 双涡轮 / <b>多涡轮</b>（四涡轮以上，如布加迪 W16）/ 机械增压 / <b>机械+涡轮</b>（双增压，如 Delta S4、沃尔沃 T8）/ 电动</td></tr>
         <tr><th>马力</th><td>曲轴马力，相差 ±50 匹内算接近</td></tr>
       </table>
       <div class="btns"><button class="pri" id="startPlay">开始猜车</button></div>
+      <div style="margin-top:12px"><button class="linklike" id="openNews">查看本次更新内容 ›</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- 更新公告：关掉玩法说明后弹出 -->
+<div id="announce">
+  <div class="sheet">
+    <div class="sheet-hd">
+      <h3>更 新 公 告 <span style="font-size:12px;color:#8a8a95;font-weight:400;letter-spacing:0;margin-left:6px">v1077</span></h3>
+      <button class="x" id="closeAnnounce" aria-label="关闭">✕</button>
+    </div>
+    <div class="sheet-bd">
+      <p><b style="color:#f5c400">题库扩到 1077 台</b>，车单取自 GT 赛车 / 极限竞速地平线 / 极品飞车系列里真实存在的车型。</p>
+      <table class="rules">
+        <tr><th>车种</th><td>拆成 <b>轿跑 / 跑车 / 超级跑车</b>，不再用"双门轿跑"这种把门数塞进车种的写法</td></tr>
+        <tr><th>车门数</th><td>只数<b>乘员门</b>，后备箱门不算：3 门掀背记 2，5 门掀背 / SUV / 旅行车记 4</td></tr>
+        <tr><th>进气</th><td>新增 <b>机械+涡轮</b>（Delta S4、沃尔沃 T8 系）和 <b>多涡轮</b>（布加迪 W16 四涡轮）</td></tr>
+        <tr><th>车种补充</th><td>皮卡回来了：F-150 猛禽 / 闪电、Ram TRX、Tacoma 等 19 台</td></tr>
+        <tr><th>机会</th><td>6 次 → <b>10 次</b></td></tr>
+        <tr><th>手机端</th><td>改成卡片布局，每次猜测一张卡、4×2 属性块，字更大</td></tr>
+        <tr><th>检索</th><td>可以输<b>年份</b>或车架代号局部搜，例如 2003、E46、R34；已猜过的车在下拉里置灰</td></tr>
+        <tr><th>动效</th><td>弹窗淡入淡出、猜测结果逐行淡入、机会点弹跳</td></tr>
+      </table>
+      <div class="btns"><button class="pri" id="startPlay2">知道了，开始猜车</button></div>
     </div>
   </div>
 </div>
@@ -257,7 +290,7 @@
 (function () {
   const MAX = 10;
   const $ = (s) => document.querySelector(s);
-  const el = { q: $('#q'), go: $('#go'), sug: $('#sug'), dots: $('#dots'), rows: $('#rows'),
+  const el = { q: $('#q'), go: $('#go'), sug: $('#sug'), msg: $('#msg'), dots: $('#dots'), rows: $('#rows'),
                cards: $('#cards'), result: $('#result'), cnt: $('#cnt'), modal: $('#modal') };
 
   let answer = null;
@@ -352,9 +385,9 @@
 
   let flashTimer = 0;
   function flash(msg) {
-    el.q.placeholder = msg;
+    el.msg.textContent = msg;
     clearTimeout(flashTimer);
-    flashTimer = setTimeout(() => (el.q.placeholder = '输入车名或车架代号，如：E46 / R34 / 205 T16'), 1600);
+    flashTimer = setTimeout(() => { el.msg.textContent = ''; }, 1800);
   }
 
   function finish(win) {
@@ -409,8 +442,12 @@
     items = v ? search(v, 12) : [];
     sel = -1;
     if (!items.length) { hideSug(); return; }
-    el.sug.innerHTML = items.map((c, i) =>
-      '<li data-i="' + i + '" class="' + (i === sel ? 'sel' : '') + '"><b>' + c.y + ' ' + c.n + '</b><em>' + c.zh + '</em></li>').join('');
+    // 已经猜过的车直接标成不可选，免得点了没反应像 bug
+    el.sug.innerHTML = items.map((c, i) => {
+      const taken = guesses.some((g) => g.n === c.n);
+      return '<li data-i="' + i + '" class="' + (i === sel ? 'sel' : '') + (taken ? ' taken' : '') + '">' +
+        '<b>' + c.y + ' ' + c.n + '</b><em>' + (taken ? '已猜过' : c.zh) + '</em></li>';
+    }).join('');
     el.sug.classList.add('open');
   }
 
@@ -430,7 +467,11 @@
   });
   el.sug.addEventListener('mousedown', (e) => {
     const li = e.target.closest('li');
-    if (li) submit(items[+li.dataset.i]);
+    if (!li) return;
+    const car = items[+li.dataset.i];
+    if (!car) return;
+    if (guesses.some((g) => g.n === car.n)) { flash('这台已经猜过了，换一台'); hideSug(); return; }
+    submit(car);
   });
   el.go.addEventListener('click', () => {
     const pick = sel >= 0 ? items[sel] : items[0];
@@ -446,14 +487,35 @@
     e.preventDefault(); nextCar();
   });
 
-  // ---------- 玩法弹窗 ----------
-  const closeHelp = () => el.modal.classList.remove('open');
+  // ---------- 玩法弹窗 + 更新公告（按版本号只弹一次）----------
+  const announce = document.getElementById('announce');
+  const NEWS_KEY = 'pitlane:news-seen';
+  const NEWS_VERSION = '1077.1';   // 版本号：改题库/规则时递增，公告就会重新弹一次
+
+  const newsSeen = () => { try { return localStorage.getItem(NEWS_KEY); } catch { return null; } };
+  const markNewsSeen = () => { try { localStorage.setItem(NEWS_KEY, NEWS_VERSION); } catch {} };
+
+  const openAnnounce = () => announce.classList.add('open');
+  const closeAnnounce = () => { announce.classList.remove('open'); markNewsSeen(); };
+
+  // 关掉玩法说明后 → 若这个版本还没看过公告，就弹出来
+  const closeHelp = () => {
+    el.modal.classList.remove('open');
+    if (newsSeen() !== NEWS_VERSION) setTimeout(openAnnounce, 260);   // 等玩法说明淡出完再弹
+  };
   $('#help').onclick = () => el.modal.classList.add('open');
   $('#closeHelp').onclick = closeHelp;
   $('#startPlay').onclick = closeHelp;
   el.modal.addEventListener('click', (e) => { if (e.target === el.modal) closeHelp(); });
+  // 玩法说明里留一个入口，随时能回看公告
+  $('#openNews').onclick = () => { el.modal.classList.remove('open'); openAnnounce(); };
+  $('#closeAnnounce').onclick = closeAnnounce;
+  $('#startPlay2').onclick = closeAnnounce;
+  announce.addEventListener('click', (e) => { if (e.target === announce) closeAnnounce(); });
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && el.modal.classList.contains('open')) closeHelp();
+    if (e.key !== 'Escape') return;
+    if (announce.classList.contains('open')) closeAnnounce();
+    else if (el.modal.classList.contains('open')) closeHelp();
   });
 
   nextCar();
