@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PIT LANE 猜车</title>
+<style>
+  :root{
+    --bg:#0a0a0c; --panel:#111114; --line:#22222a; --dim:#8e8e9a; --gold:#f5c400;
+    --hit:#2fa84f; --near:#e8b60b; --miss:#d32f2f; --txt:#f4f4f7;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:
+      repeating-linear-gradient(45deg,#0d0d10 0 5px,#0a0a0c 5px 10px),
+      var(--bg);
+    color:var(--txt); font:15px/1.5 "Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    padding:0 0 40px; min-height:100vh;
+  }
+  .checker{height:13px;background:repeating-conic-gradient(var(--gold) 0% 25%,#0d0d10 0% 50%) 0 0/13px 13px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 12px}
+
+  header{display:flex;align-items:center;gap:10px;padding:14px 0 4px}
+  .logo{font-size:25px;font-weight:900;font-style:italic;letter-spacing:.04em;white-space:nowrap}
+  .logo b{color:var(--gold)}
+  .logo em{font-style:italic;color:#ff4d4d}
+  header .spacer{flex:1}
+  .icon{
+    width:36px;height:36px;border-radius:50%;border:2px solid #3a3a44;background:transparent;
+    color:#9a9aa6;font:700 15px/1 system-ui;cursor:pointer
+  }
+  .icon:hover{color:var(--txt);border-color:#606070}
+  .rule-line{height:1px;background:linear-gradient(90deg,#2a2a33,transparent);margin:8px 0 14px}
+
+  .lede{color:var(--dim);font-size:13px;text-align:center;letter-spacing:.02em;margin:0 0 12px}
+  .lede b{color:var(--gold);font-weight:700}
+
+  .sel{display:flex;gap:8px;position:relative}
+  #q{
+    flex:1;min-width:0;padding:13px 14px;border-radius:3px;border:1px solid #34343e;background:#141418;
+    color:var(--txt);font:inherit;outline:none
+  }
+  #q:focus{border-color:var(--gold)}
+  #q:disabled{opacity:.5}
+  #go{
+    padding:0 26px;border:0;border-radius:3px;background:var(--gold);color:#151204;
+    font:900 15px/1 inherit;letter-spacing:.14em;cursor:pointer;white-space:nowrap
+  }
+  #go:disabled{background:#5f5626;color:#3a3a3a;cursor:default}
+  #sug{
+    position:absolute;z-index:30;left:0;right:112px;top:calc(100% + 5px);margin:0;padding:5px;
+    list-style:none;background:#1b1b21;border:1px solid #34343e;border-radius:4px;
+    max-height:380px;overflow:auto;display:none;box-shadow:0 20px 44px #000b
+  }
+  #sug.open{display:block}
+  #sug li{padding:9px 10px;border-radius:3px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+  #sug li.sel,#sug li:hover{background:#2c2c36}
+  #sug li em{color:var(--dim);font-style:normal;font-size:12px;white-space:nowrap}
+
+  .dots{display:flex;gap:7px;justify-content:center;margin:13px 0}
+  .dots i{width:11px;height:11px;border-radius:50%;border:2px solid #3c3c46}
+  .dots i.used{border-color:var(--gold);background:var(--gold)}
+
+  .tablewrap{overflow-x:auto;padding-bottom:4px}
+  table.grid{border-collapse:separate;border-spacing:3px 3px;width:100%;min-width:720px;table-layout:fixed}
+  table.grid th{
+    color:#b6b6c2;font-size:12px;font-weight:700;letter-spacing:.1em;text-align:center;
+    padding:8px 2px;background:#101015;border-radius:3px;white-space:nowrap
+  }
+  table.grid th.cname{text-align:left;padding-left:10px;letter-spacing:.06em}
+  table.grid td{
+    background:#17171c;border-radius:3px;text-align:center;padding:10px 4px;font-size:13px;
+    font-weight:700;line-height:1.25;word-break:break-word
+  }
+  td.cname{
+    position:sticky;left:0;z-index:2;text-align:left!important;padding:8px 10px!important;
+    background:#101015;font-weight:700;min-width:190px
+  }
+  td.cname small{display:block;color:var(--dim);font-weight:400;font-size:11px;margin-top:2px}
+  tr.r-empty td{color:#3f3f4a;font-weight:400;font-size:12px;background:#131318}
+  tr.r-empty td.cname{color:#3f3f4a}
+  tr.r-filled td.hit{background:var(--hit);color:#fff}
+  tr.r-filled td.near{background:var(--near);color:#1a1503}
+  tr.r-filled td.miss{background:var(--miss);color:#fff}
+  tr.r-filled td.cname{background:#1a1a20}
+  tr.r-filled.win td.cname{background:#123a20}
+  tr.r-filled.win td.hit{box-shadow:inset 0 0 0 2px #7cea9d}
+  .arrow{font-weight:400;margin-left:2px}
+
+  #result{margin-top:16px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px}
+  .panel h2{margin:0 0 8px;font-size:18px}
+  .ans{font-size:19px;font-weight:800;margin:4px 0}
+  .ans small{font-weight:400;color:var(--dim);font-size:13px;margin-left:8px}
+  .specs{color:var(--dim);font-size:13px;margin:6px 0 14px}
+  .mystats{color:#63636f;font-size:12px;margin-top:12px;border-top:1px solid var(--line);padding-top:10px}
+  .btns{display:flex;gap:8px;flex-wrap:wrap}
+  .btns button{
+    padding:11px 18px;border-radius:3px;border:1px solid #3a3a46;background:#22222a;color:var(--txt);
+    font:inherit;font-size:14px;cursor:pointer
+  }
+  .btns button.pri{background:var(--gold);border-color:var(--gold);color:#151204;font-weight:800}
+  .foot{color:#4f4f5a;font-size:12px;margin-top:18px;text-align:center}
+
+  /* 玩法弹窗：打开网站自动弹出 */
+  #modal{position:fixed;inset:0;background:#000d;display:none;align-items:flex-start;justify-content:center;
+         padding:24px 14px;z-index:60;overflow:auto}
+  #modal.open{display:flex}
+  .sheet{
+    background:#141418;border:1px solid #2e2e38;border-radius:6px;width:100%;max-width:560px;
+    box-shadow:0 30px 80px #000c
+  }
+  .sheet-hd{display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:2px solid var(--gold)}
+  .sheet-hd h3{margin:0;font-size:21px;letter-spacing:.1em;color:var(--gold);font-weight:900;flex:1}
+  .sheet-hd .x{background:none;border:0;color:#9c9caa;font:400 22px/1 system-ui;cursor:pointer}
+  .sheet-hd .x:hover{color:#fff}
+  .sheet-bd{padding:16px 18px 18px}
+  .sheet-bd p{margin:0 0 12px;font-size:14px;color:#d3d3dc;line-height:1.7}
+  .sheet-bd p .k{color:var(--gold);font-weight:700}
+  .sw{display:inline-block;width:15px;height:15px;border-radius:1px;vertical-align:-3px;margin-right:6px}
+  .sw.g{background:var(--hit)}.sw.y{background:var(--near)}.sw.r{background:var(--miss)}
+  .sheet-bd .swrow{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;margin:0 0 14px;color:#d3d3dc}
+  table.rules{width:100%;border-collapse:collapse;font-size:13px;margin:4px 0 16px}
+  table.rules th,table.rules td{text-align:left;vertical-align:top;padding:9px 10px 9px 0;border-bottom:1px solid #23232c}
+  table.rules th{color:var(--gold);white-space:nowrap;width:64px;font-weight:800;letter-spacing:.04em}
+  table.rules td{color:#b6b6c2}
+  @media(max-width:520px){
+    .logo{font-size:20px}
+    table.grid{min-width:660px}
+    table.grid td{font-size:12px;padding:8px 3px}
+    td.cname{min-width:150px}
+  }
+</style>
+</head>
+<body>
+<div class="checker"></div>
+<div class="wrap">
+  <header>
+    <div class="logo">PIT <b>LANE</b> <em>猜车</em></div>
+    <div class="spacer"></div>
+    <button class="icon" id="help" title="玩法">?</button>
+  </header>
+  <div class="rule-line"></div>
+
+  <p class="lede">猜一台<b>性能车</b>。每项属性都会告诉你离答案有多近。</p>
+
+  <div class="sel">
+    <input id="q" placeholder="输入车名或车架代号，如：E46 / R34 / 205 T16" autocomplete="off" spellcheck="false">
+    <button id="go">猜</button>
+    <ul id="sug"></ul>
+  </div>
+
+  <div class="dots" id="dots"></div>
+
+  <div class="tablewrap">
+    <table class="grid">
+      <colgroup>
+        <col style="width:210px">
+        <col span="8">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="cname">车名</th>
+          <th>年款</th><th>国别</th><th>气缸</th><th>车门数</th><th>车种</th><th>驱动</th><th>进气</th><th>马力</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+
+  <div id="result"></div>
+  <div class="foot">共 10 次机会 · 猜对或猜满就换下一台车 · 题库 <span id="cnt">0</span> 台（数据为约值，仅供娱乐）</div>
+</div>
+
+<div id="modal" class="open">
+  <div class="sheet">
+    <div class="sheet-hd">
+      <h3>玩 法</h3>
+      <button class="x" id="closeHelp" aria-label="关闭">✕</button>
+    </div>
+    <div class="sheet-bd">
+      <p>猜出这台<span class="k">性能车</span>，共 10 次机会。每次猜完，8 项属性都会上色：</p>
+      <p class="swrow">
+        <span><span class="sw g"></span>完全一致</span>
+        <span><span class="sw y"></span>接近</span>
+        <span><span class="sw r"></span>不对</span>
+      </p>
+      <p>年款、气缸、马力这三项还会带 <b>↑</b> / <b>↓</b>，指示答案比你的猜测更大（更晚）还是更小（更早）。</p>
+      <table class="rules">
+        <tr><th>年款</th><td>生产年份，相差 ±5 年内算接近</td></tr>
+        <tr><th>国别</th><td>原产国，同一大区算接近（欧洲 / 亚洲 / 北美）</td></tr>
+        <tr><th>气缸</th><td>气缸数，相差 ±2 算接近；转子发动机记转子数；纯电车为 0</td></tr>
+        <tr><th>车门数</th><td>车门数量，必须完全一致</td></tr>
+        <tr><th>车种</th><td>双门轿跑 / 轿车 / 掀背 / 敞篷 / 旅行车 / SUV / 皮卡</td></tr>
+        <tr><th>驱动</th><td>前驱 / 后驱 / 四驱，必须完全一致</td></tr>
+        <tr><th>进气</th><td>自然吸气 / 涡轮增压 / 双涡轮 / 机械增压 / 电动</td></tr>
+        <tr><th>马力</th><td>曲轴马力，相差 ±50 匹内算接近</td></tr>
+      </table>
+      <div class="btns"><button class="pri" id="startPlay">开始猜车</button></div>
+    </div>
+  </div>
+</div>
+
+<script src="game.js"></script>
+<script>
+(function () {
+  const MAX = 10;
+  const $ = (s) => document.querySelector(s);
+  const el = { q: $('#q'), go: $('#go'), sug: $('#sug'), dots: $('#dots'), rows: $('#rows'),
+               result: $('#result'), cnt: $('#cnt'), modal: $('#modal') };
+
+  let answer = null;
+  let prevName = '';
+  let guesses = [];
+  let done = false;
+  let sel = -1;
+  let items = [];
+  const SKEY = 'pitlane:stats';
+
+  el.cnt.textContent = CARS.length;
+
+  const stats = () => {
+    const def = { played: 0, wins: 0, total: 0 };
+    try { return Object.assign(def, JSON.parse(localStorage.getItem(SKEY)) || {}); } catch { return def; }
+  };
+  const saveStats = (s) => { try { localStorage.setItem(SKEY, JSON.stringify(s)); } catch {} };
+
+  function renderDots() {
+    el.dots.innerHTML = '';
+    for (let i = 0; i < MAX; i++) {
+      const d = document.createElement('i');
+      if (i < guesses.length) d.className = 'used';
+      el.dots.appendChild(d);
+    }
+  }
+
+  function buildEmptyRows() {
+    el.rows.innerHTML = '';
+    for (let i = 0; i < MAX; i++) {
+      const tr = document.createElement('tr');
+      tr.className = 'r-empty';
+      tr.innerHTML = '<td class="cname">第 ' + (i + 1) + ' 猜</td>' + ATTRS.map(() => '<td>·</td>').join('');
+      el.rows.appendChild(tr);
+    }
+  }
+
+  function nextCar() {
+    answer = pickRandom(prevName);
+    prevName = answer.n;
+    guesses = []; done = false; sel = -1; items = [];
+    el.result.innerHTML = '';
+    el.q.value = ''; el.q.disabled = false; el.go.disabled = false;
+    hideSug(); buildEmptyRows(); renderDots();
+  }
+
+  function fillRow(index, car) {
+    const tr = el.rows.children[index];
+    tr.className = 'r-filled' + (car.n === answer.n ? ' win' : '');
+    tr.innerHTML = '<td class="cname">' + car.y + ' ' + car.n + '<small>' + car.zh + '</small></td>' +
+      compare(car, answer).map((r) => {
+        const arrow = r.dir === 1 ? '<span class="arrow">↑</span>' : r.dir === -1 ? '<span class="arrow">↓</span>' : '';
+        return '<td class="' + r.state + '">' + car[r.key] + arrow + '</td>';
+      }).join('');
+  }
+
+  function submit(car) {
+    if (done || !car) return;
+    if (guesses.some((g) => g.n === car.n)) { flash('这台已经猜过了'); return; }
+    guesses.push(car);
+    el.q.value = ''; hideSug();
+    fillRow(guesses.length - 1, car);
+    renderDots();
+    if (car.n === answer.n) finish(true);
+    else if (guesses.length >= MAX) finish(false);
+  }
+
+  let flashTimer = 0;
+  function flash(msg) {
+    el.q.placeholder = msg;
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(() => (el.q.placeholder = '输入车名或车架代号，如：E46 / R34 / 205 T16'), 1600);
+  }
+
+  function finish(win) {
+    done = true;
+    el.q.disabled = true; el.go.disabled = true;
+    const s = stats();
+    s.played++;
+    if (win) { s.wins++; s.total += guesses.length; }
+    saveStats(s);
+
+    const p = document.createElement('div');
+    p.className = 'panel';
+    p.innerHTML = '<h2>' + (win ? '🏁 猜对了！' : '🏳️ 机会用完了') + '</h2>' +
+      '<div class="ans">' + answer.n + '<small>' + answer.zh + '</small></div>' +
+      '<div class="specs">' + answer.y + ' 年 · ' + answer.c + ' · ' + (answer.cy || '—') + ' 缸 · ' + answer.d +
+      ' 门 · ' + answer.b + ' · ' + answer.dr + ' · ' + answer.asp + ' · ' + answer.hp + ' 匹</div>' +
+      '<div class="btns"><button class="pri" id="next">下一台车 ▶</button><button id="share">复制成绩</button></div>';
+    el.result.appendChild(p);
+    p.querySelector('#next').onclick = nextCar;
+    p.querySelector('#share').onclick = () => copy(shareText(win), p.querySelector('#share'));
+    const st = stats();
+    p.insertAdjacentHTML('beforeend',
+      '<div class="mystats">已玩 ' + st.played + ' 局 · 胜率 ' + (st.played ? Math.round(st.wins / st.played * 100) : 0) +
+      '% · 平均 ' + (st.wins ? (st.total / st.wins).toFixed(1) : '—') + ' 次猜中</div>');
+  }
+
+  function shareText(win) {
+    return ['PIT LANE 猜车 ' + (win ? guesses.length : 'X') + '/' + MAX]
+      .concat(guesses.map((g) => compare(g, answer)
+        .map((r) => (r.state === 'hit' ? '🟩' : r.state === 'near' ? '🟨' : '🟥')).join('')))
+      .join('\n');
+  }
+
+  function copy(text, btn) {
+    const ok = () => { btn.textContent = '已复制 ✓'; setTimeout(() => (btn.textContent = '复制成绩'), 1500); };
+    const fallback = () => {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); ok(); } catch { alert(text); }
+      ta.remove();
+    };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fallback);
+    else fallback();
+  }
+
+  // ---------- 搜索下拉 ----------
+  function hideSug() { el.sug.classList.remove('open'); sel = -1; items = []; }
+
+  function renderSug() {
+    const v = el.q.value.trim();
+    items = v ? search(v, 12) : [];
+    sel = -1;
+    if (!items.length) { hideSug(); return; }
+    el.sug.innerHTML = items.map((c, i) =>
+      '<li data-i="' + i + '" class="' + (i === sel ? 'sel' : '') + '"><b>' + c.y + ' ' + c.n + '</b><em>' + c.zh + '</em></li>').join('');
+    el.sug.classList.add('open');
+  }
+
+  el.q.addEventListener('input', renderSug);
+  el.q.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!items.length) return;
+      sel = (sel + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length;
+      [...el.sug.children].forEach((li, i) => li.classList.toggle('sel', i === sel));
+      el.sug.children[sel].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      const pick = sel >= 0 ? items[sel] : items[0];
+      if (pick) submit(pick);
+      else flash('没找到这台车，换个写法试试');
+    } else if (e.key === 'Escape') hideSug();
+  });
+  el.sug.addEventListener('mousedown', (e) => {
+    const li = e.target.closest('li');
+    if (li) submit(items[+li.dataset.i]);
+  });
+  el.go.addEventListener('click', () => {
+    const pick = sel >= 0 ? items[sel] : items[0];
+    if (pick) submit(pick);
+    else flash('没找到这台车，换个写法试试');
+  });
+  document.addEventListener('click', (e) => { if (!e.target.closest('.sel')) hideSug(); });
+
+  // 结算后按 Enter 换下一台（提交那一次 Enter 会冒泡上来，要挡掉）
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || !done) return;
+    if (e.target === el.q || (e.target.closest && e.target.closest('button'))) return;
+    e.preventDefault(); nextCar();
+  });
+
+  // ---------- 玩法弹窗 ----------
+  const closeHelp = () => el.modal.classList.remove('open');
+  $('#help').onclick = () => el.modal.classList.add('open');
+  $('#closeHelp').onclick = closeHelp;
+  $('#startPlay').onclick = closeHelp;
+  el.modal.addEventListener('click', (e) => { if (e.target === el.modal) closeHelp(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && el.modal.classList.contains('open')) closeHelp();
+  });
+
+  nextCar();
+})();
+</script>
+</body>
+</html>
